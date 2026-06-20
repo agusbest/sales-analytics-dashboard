@@ -272,7 +272,10 @@ export default function Transactions() {
 
                             {loading ? (
                                 Array.from({ length: 5 }).map((_, i) => (
-                                    <tr key={i} className="animate-pulse">
+                                    <tr
+                                        key={i}
+                                        className="animate-pulse"
+                                    >
                                         <td className="p-3">...</td>
                                         <td className="p-3">...</td>
                                         <td className="p-3">...</td>
@@ -281,35 +284,16 @@ export default function Transactions() {
                                         <td className="p-3">...</td>
                                         <td className="p-3">...</td>
                                         <td className="p-3 text-center">
-
-                                            <div className="flex justify-center gap-3">
-
-                                                <button
-                                                    onClick={() =>
-                                                        handleEdit(row)
-                                                    }
-                                                    className="text-blue-600 hover:text-blue-800"
-                                                >
-                                                    <FaEdit size={18} />
-                                                </button>
-
-                                                <button
-                                                    onClick={() =>
-                                                        handleDelete(row.id)
-                                                    }
-                                                    className="text-red-600 hover:text-red-800"
-                                                >
-                                                    <FaTrash size={18} />
-                                                </button>
-
-                                            </div>
-
+                                            ...
                                         </td>
                                     </tr>
                                 ))
                             ) : rows.length === 0 ? (
                                 <tr>
-                                    <td colSpan={8} className="text-center p-6 text-gray-500">
+                                    <td
+                                        colSpan={8}
+                                        className="text-center p-6 text-gray-500"
+                                    >
                                         No data found
                                     </td>
                                 </tr>
@@ -322,8 +306,9 @@ export default function Transactions() {
                                     >
 
                                         <td className="p-3 whitespace-nowrap">
-                                            {new Date(row.transaction_date)
-                                                .toLocaleDateString("id-ID")}
+                                            {new Date(
+                                                row.transaction_date
+                                            ).toLocaleDateString("id-ID")}
                                         </td>
 
                                         <td className="p-3">
@@ -352,8 +337,8 @@ export default function Transactions() {
 
                                         <td
                                             className={`p-3 text-right font-medium ${row.profit >= 0
-                                                ? "text-green-600"
-                                                : "text-red-600"
+                                                    ? "text-green-600"
+                                                    : "text-red-600"
                                                 }`}
                                         >
                                             {formatRupiah(row.profit)}
@@ -364,7 +349,9 @@ export default function Transactions() {
                                             <div className="flex justify-center gap-3">
 
                                                 <button
-                                                    onClick={() => handleEdit(row)}
+                                                    onClick={() =>
+                                                        handleEdit(row)
+                                                    }
                                                     className="text-blue-600 hover:text-blue-800 transition"
                                                     title="Edit"
                                                 >
@@ -372,7 +359,9 @@ export default function Transactions() {
                                                 </button>
 
                                                 <button
-                                                    onClick={() => handleDelete(row.id)}
+                                                    onClick={() =>
+                                                        handleDelete(row.id)
+                                                    }
                                                     className="text-red-600 hover:text-red-800 transition"
                                                     title="Delete"
                                                 >
