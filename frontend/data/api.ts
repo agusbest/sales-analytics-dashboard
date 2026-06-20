@@ -136,7 +136,7 @@ export async function importExcel(
 export async function exportExcel(search = "") {
 
     const res = await fetch(
-        `http://localhost:5000/api/sales/export?search=${search}`
+        `${API_URL}/sales/export?search=${search}`
     );
 
     const blob = await res.blob();

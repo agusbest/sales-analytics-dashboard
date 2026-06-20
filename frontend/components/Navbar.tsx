@@ -14,148 +14,133 @@ import {
 
 export default function Navbar() {
 
-    const pathname =
-        usePathname();
+    const pathname = usePathname();
 
-    const [isLoggedIn, setIsLoggedIn] =
-        useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
+    // 🔥 TAMBAHAN: biar tidak render sebelum cek localStorage
+    const [hydrated, setHydrated] = useState(false);
 
     useEffect(() => {
 
-        setIsLoggedIn(
-            !!localStorage.getItem("token")
-        );
+        const token = localStorage.getItem("token");
+
+        setIsLoggedIn(!!token);
+
+        // 🔥 tandai sudah sync dengan browser
+        setHydrated(true);
+
 
     }, [pathname]);
 
-
     const menus = [
-
         {
             href: "/",
             label: "Dashboard",
             icon: <FaChartLine />
         },
-
         {
             href: "/transactions",
             label: "Transactions",
             icon: <FaTable />
         },
-
         {
             href: "/import",
             label: "Import",
             icon: <FaFileImport />
         },
-
-
     ];
+
 
     function logout() {
 
-        localStorage.removeItem(
-            "token"
-        );
+        localStorage.removeItem("token");
 
         setIsLoggedIn(false);
 
-        window.location.href =
-            "/login";
+        window.location.href = "/login";
 
     }
 
     return (
 
-        <nav
-            className="
+        <nav className="
             sticky top-0 z-50
             backdrop-blur-lg
             bg-white/70
             border-b
             shadow-sm
-        "
-        >
+        ">
 
-            <div
-                className="
-    max-w-7xl
-    mx-auto
-    px-6
-    h-16
-    flex
-    items-center
-    justify-between
-"
-            >
+            <div className="
+                max-w-7xl
+                mx-auto
+                px-6
+                h-16
+                flex
+                items-center
+                justify-between
+            ">
 
                 {/* LOGO */}
-
                 <Link
                     href="/"
-                    className="
-        font-bold
-        text-xl
-        text-indigo-600
-    "
+                    className="font-bold text-xl text-indigo-600"
                 >
                     📊 Sales Analytics
                 </Link>
 
                 {/* MENU + LOGIN */}
+                <div className="
+                    flex
+                    items-center
+                    gap-2
+                    overflow-x-auto
+                    whitespace-nowrap
+                ">
 
-                <div
-                    className="
-        flex
-        items-center
-        gap-2
-        overflow-x-auto
-        whitespace-nowrap
-    "
-                >
-
-                    {menus.map(menu => (
-
+                    {/* MENU */}
+                    {isLoggedIn && menus.map(menu => (
                         <Link
                             key={menu.href}
                             href={menu.href}
                             className={`
-                     flex-shrink-0
-                                flex
-                    items-center
-                    gap-2
-                    px-4
-                    py-2
-                    rounded-xl
-                    transition-all
-
-                    ${pathname === menu.href
+            flex-shrink-0
+            flex
+            items-center
+            gap-2
+            px-4
+            py-2
+            rounded-xl
+            transition-all
+            ${pathname === menu.href
                                     ? "bg-indigo-600 text-white shadow"
                                     : "hover:bg-indigo-100"
                                 }
-                `}
+        `}
                         >
                             {menu.icon}
                             {menu.label}
                         </Link>
-
                     ))}
 
-                    {isLoggedIn ? (
+                    {/* 🔥 TAMBAHAN: tahan render sampai hydration selesai */}
+                    {!hydrated ? null : isLoggedIn ? (
 
                         <button
                             onClick={logout}
                             className="
-                bg-red-500
-                hover:bg-red-600
-                text-white
-                px-4
-                py-2
-                rounded-xl
-                flex
-                items-center
-                gap-2
-            "
+                                bg-red-500
+                                hover:bg-red-600
+                                text-white
+                                px-4
+                                py-2
+                                rounded-xl
+                                flex
+                                items-center
+                                gap-2
+                            "
                         >
                             Logout
                         </button>
@@ -165,13 +150,13 @@ export default function Navbar() {
                         <Link
                             href="/login"
                             className="
-                bg-indigo-600
-                hover:bg-indigo-700
-                text-white
-                px-4
-                py-2
-                rounded-xl
-            "
+                                bg-indigo-600
+                                hover:bg-indigo-700
+                                text-white
+                                px-4
+                                py-2
+                                rounded-xl
+                            "
                         >
                             Login
                         </Link>
