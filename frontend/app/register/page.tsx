@@ -71,11 +71,7 @@ export default function RegisterPage() {
 
         } catch {
 
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: error.message,
-            });
+            alert('Gagal Regitrasi..!')
 
         } finally {
 
