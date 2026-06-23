@@ -53,7 +53,10 @@ export default function LoginPage() {
                         result.user
                     )
                 );
+                // console.log("🔥 dispatch authChange");
 
+                // 🔥 trigger navbar update
+                window.dispatchEvent(new Event("authChange"));
                 router.push("/");
 
             } else {

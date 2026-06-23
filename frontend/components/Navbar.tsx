@@ -13,19 +13,38 @@ import {
 export default function Navbar() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [open, setOpen] = useState(false);
 
+    // useEffect(() => {
+    //     setIsLoggedIn(!!localStorage.getItem("token"));
+    // }, []);
+    // useEffect(() => {
+    //     const sync = setInterval(() => {
+    //         setIsLoggedIn(!!localStorage.getItem("token"));
+    //     }, 500);
+
+    //     return () => clearInterval(sync);
+    // }, []);
     useEffect(() => {
-        setIsLoggedIn(!!localStorage.getItem("token"));
+        const syncAuth = () => {
+            setIsLoggedIn(!!localStorage.getItem("token"));
+        };
+
+        syncAuth();
+
+        window.addEventListener("authChange", syncAuth);
+        window.addEventListener("storage", syncAuth);
+
+        return () => {
+            window.removeEventListener("authChange", syncAuth);
+            window.removeEventListener("storage", syncAuth);
+        };
     }, []);
-
     const pathname = usePathname();
-
-    // const isLoggedIn =
-    //     typeof window !== "undefined" &&
-    //     !!localStorage.getItem("token");
 
     function logout() {
         localStorage.removeItem("token");
+        window.dispatchEvent(new Event("authChange"));
         window.location.href = "/login";
     }
 
@@ -44,11 +63,13 @@ export default function Navbar() {
             shadow-sm
         ">
 
+            {/* MAIN BAR */}
             <div className="
                 max-w-7xl mx-auto px-6 h-16
                 flex items-center justify-between
             ">
 
+                {/* LOGO */}
                 <Link
                     href="/"
                     className="font-bold text-xl text-indigo-600"
@@ -56,9 +77,9 @@ export default function Navbar() {
                     📊 Sales Analytics
                 </Link>
 
-                <div className="flex items-center gap-2">
+                {/* DESKTOP MENU */}
+                <div className="hidden md:flex items-center gap-2">
 
-                    {/* MENU */}
                     {isLoggedIn && menus.map(menu => (
                         <Link
                             key={menu.href}
@@ -76,7 +97,54 @@ export default function Navbar() {
                         </Link>
                     ))}
 
-                    {/* AUTH */}
+                    {!isLoggedIn ? (
+                        <Link
+                            href="/login"
+                            className="bg-indigo-600 text-white px-4 py-2 rounded-xl"
+                        >
+                            Login
+                        </Link>
+                    ) : (
+                        <button
+                            onClick={logout}
+                            className="bg-red-500 text-white px-4 py-2 rounded-xl"
+                        >
+                            Logout
+                        </button>
+                    )}
+                </div>
+
+                {/* HAMBURGER */}
+                <button
+                    className="md:hidden text-2xl"
+                    onClick={() => setOpen(!open)}
+                >
+                    ☰
+                </button>
+            </div>
+
+            {/* MOBILE MENU */}
+            {open && (
+                <div className="md:hidden px-6 pb-4 flex flex-col gap-2">
+
+                    {isLoggedIn && menus.map(menu => (
+                        <Link
+                            key={menu.href}
+                            href={menu.href}
+                            onClick={() => setOpen(false)}
+                            className={`
+                                flex items-center gap-2 px-4 py-2 rounded-xl
+                                ${pathname === menu.href
+                                    ? "bg-indigo-600 text-white"
+                                    : "hover:bg-indigo-100"
+                                }
+                            `}
+                        >
+                            {menu.icon}
+                            {menu.label}
+                        </Link>
+                    ))}
+
                     {!isLoggedIn ? (
                         <Link
                             href="/login"
@@ -94,8 +162,8 @@ export default function Navbar() {
                     )}
 
                 </div>
+            )}
 
-            </div>
         </nav>
     );
 }
