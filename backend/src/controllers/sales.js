@@ -279,20 +279,40 @@ exports.exportExcel = async (req, res) => {
 };
 
 exports.store = async (req, res) => {
+    try {
 
-    await db.query(
-        `
-        INSERT INTO
-        sales_transactions
-        SET ?
-        `,
-        [req.body]
-    );
+        // console.log('BODY:', req.body);
+        const invoice_no = `INV-${Date.now()}`;
+        const data = {
+            invoice_no,
+            ...req.body
+        };
+        // console.log('DATA KE DB:', data);
+        delete data.id;
+        await db.query(
+            `
+            INSERT INTO sales_transactions SET ?
+            `,
+            data
+        );
 
-    res.json({
-        success: true
-    });
+        return res.json({
+            success: true,
+            message: 'Data berhasil disimpan',
+            data
+        });
+
+    } catch (error) {
+        // console.error('STORE ERROR:', error);
+
+        return res.status(500).json({
+            success: false,
+            message: 'Gagal menyimpan data',
+            error: error.message
+        });
+    }
 };
+
 
 exports.update = async (req, res) => {
 

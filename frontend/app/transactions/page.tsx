@@ -7,6 +7,7 @@ import {
     FaTrash
 } from "react-icons/fa";
 
+
 import Swal from "sweetalert2";
 
 import {
@@ -142,12 +143,22 @@ export default function Transactions() {
 
             loadData();
 
-        } catch (error) {
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil",
+                text: "Data berhasil disimpan",
+                timer: 1500,
+                showConfirmButton: false
+            });
 
+        } catch (error: any) {
             console.error(error);
 
-            alert("Gagal simpan data");
-
+            Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: error?.message || "Gagal simpan data"
+            });
         }
     }
 
@@ -337,8 +348,8 @@ export default function Transactions() {
 
                                         <td
                                             className={`p-3 text-right font-medium ${row.profit >= 0
-                                                    ? "text-green-600"
-                                                    : "text-red-600"
+                                                ? "text-green-600"
+                                                : "text-red-600"
                                                 }`}
                                         >
                                             {formatRupiah(row.profit)}

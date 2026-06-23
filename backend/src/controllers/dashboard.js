@@ -231,46 +231,33 @@ exports.branch = async (req, res) => {
 exports.topProducts = async (req, res) => {
 
     try {
-
         const month = req.query.month;
-
         const { where, params } =
             getMonthFilter(month);
-
         const [rows] = await db.query(
             `
             SELECT
-
                 product_name,
-
                 SUM(qty) qty,
-
                 SUM(revenue) revenue,
-
+                SUM(cost) cost,
                 SUM(profit) profit
-
             FROM sales_transactions
-
             ${where}
-
             GROUP BY product_name
-
             ORDER BY revenue DESC
-
             LIMIT 10
             `,
             params
         );
 
         const result = rows.map(item => ({
-
             product: item.product_name,
-
             qty: item.qty,
-
             revenue:
                 `Rp ${(item.revenue / 1000000).toFixed(0)} Jt`,
-
+            cost:
+                `Rp ${(item.cost / 1000000).toFixed(0)} Jt`,
             profit:
                 `Rp ${(item.profit / 1000000).toFixed(0)} Jt`
 

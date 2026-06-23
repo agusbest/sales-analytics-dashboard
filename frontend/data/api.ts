@@ -2,6 +2,8 @@ const API_URL =
     process.env.NEXT_PUBLIC_API_URL ||
     "http://localhost:5000/api";
 
+// console.log("API_URL:", API_URL);
+
 export async function getDashboardData(
     month: string
 ) {
@@ -172,47 +174,49 @@ export async function deleteSale(
 
 }
 
-export async function createSale(
-    data: any
-) {
-    const response =
-        await fetch(
-            `${API_URL}/sales`,
-            {
-                method: "POST",
+export async function createSale(data: any) {
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+    const token = localStorage.getItem("token");
 
-                body:
-                    JSON.stringify(data)
-            }
-        );
+    const response = await fetch(`${API_URL}/sales`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    });
 
-    return response.json();
+    // 🔥 penting: cek dulu response sebelum json
+    const text = await response.text();
+
+    try {
+        return JSON.parse(text);
+    } catch (err) {
+        console.error("Non-JSON response:", text);
+        throw new Error("Server tidak mengembalikan JSON");
+    }
 }
 
-export async function updateSale(
-    id: number,
-    data: any
-) {
-    const response =
-        await fetch(
-            `${API_URL}/sales/${id}`,
-            {
-                method: "PUT",
+export async function updateSale(id: number, data: any) {
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+    const token = localStorage.getItem("token");
 
-                body:
-                    JSON.stringify(data)
-            }
-        );
+    const response = await fetch(`${API_URL}/sales/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    });
 
-    return response.json();
+    const text = await response.text();
+
+    try {
+        return JSON.parse(text);
+    } catch (err) {
+        console.error("Non-JSON response:", text);
+        throw new Error("Server tidak mengembalikan JSON");
+    }
 }

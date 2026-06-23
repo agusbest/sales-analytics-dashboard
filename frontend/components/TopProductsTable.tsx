@@ -1,6 +1,7 @@
 interface ProductData {
   product: string;
   qty: number;
+  cost: number;
   revenue: string;
   profit: string;
 }
@@ -32,6 +33,9 @@ export default function TopProductsTable({
             <th className="text-left p-3">
               Revenue
             </th>
+            <th className="text-left p-3">
+              Cost
+            </th>
 
             <th className="text-left p-3">
               Profit
@@ -60,6 +64,10 @@ export default function TopProductsTable({
 
               <td className="p-3">
                 {item.revenue}
+              </td>
+
+              <td className="p-3">
+                {item.cost}
               </td>
 
               <td className="p-3">
