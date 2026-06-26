@@ -138,7 +138,7 @@ export default function LoginPage() {
 
                 </form>
 
-                <p className="text-center text-sm mt-4">
+                {/* <p className="text-center text-sm mt-4">
 
                     Belum punya akun?
 
@@ -149,7 +149,7 @@ export default function LoginPage() {
                         Register
                     </a>
 
-                </p>
+                </p> */}
 
             </div>
 
