@@ -15,16 +15,6 @@ export default function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [open, setOpen] = useState(false);
 
-    // useEffect(() => {
-    //     setIsLoggedIn(!!localStorage.getItem("token"));
-    // }, []);
-    // useEffect(() => {
-    //     const sync = setInterval(() => {
-    //         setIsLoggedIn(!!localStorage.getItem("token"));
-    //     }, 500);
-
-    //     return () => clearInterval(sync);
-    // }, []);
     useEffect(() => {
         const syncAuth = () => {
             setIsLoggedIn(!!localStorage.getItem("token"));
@@ -41,6 +31,13 @@ export default function Navbar() {
         };
     }, []);
     const pathname = usePathname();
+
+    if (
+        pathname === "/login" ||
+        pathname === "/register"
+    ) {
+        return null;
+    }
 
     function logout() {
         localStorage.removeItem("token");
